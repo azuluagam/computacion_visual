@@ -90,8 +90,8 @@ class Sphere extends Primitive {
 	}
 
 	draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers, deltaTime, vecTranslate, textures) {
-		mat4.translate(modelViewMatrix, modelViewMatrix, vecTranslate);  // amount to translate
-		mat4.rotate(modelViewMatrix,  modelViewMatrix,   cubeRotation*.7, [0, 1, 0]);
+		//mat4.translate(modelViewMatrix, modelViewMatrix, vecTranslate);  // amount to translate
+		//mat4.rotate(modelViewMatrix,  modelViewMatrix,   cubeRotation*.7, [0, 1, 0]);
 		const normalMatrix = mat4.create();
 		mat4.invert(normalMatrix, modelViewMatrix);
 		mat4.transpose(normalMatrix, normalMatrix);

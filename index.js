@@ -3,8 +3,16 @@ var rAmbientLight = 0.1, gAmbientLight = 0.1, bAmbientLight = 0.1;
 var rDirectional = 1.0, gDirectional = 1.0, bDirectional = 1.0;
 var directional = [1.0, 1.0, 1.0];
 var sphereO;
+var sphereV;
 var cylinderO;
 var cubeO;
+var translation = [0.0, 0, -16.0];
+var mouseXclick = 5.0;
+var mouseYclick = 5.0;
+var posX = 0.0;
+var posY = 0.0;
+var deltaY = 0.0;
+var deltaX = 0.0;
 
 main();
 
@@ -21,6 +29,26 @@ function main() {
     alert('Unable to initialize WebGL. Your browser or machine may not support it.');
     return;
   }
+
+  canvas.addEventListener("mouseup", function(event){
+    var width=canvas.width;
+    var height=canvas.height; 
+    mouseXclick = (2/width)*(event.clientX-width)+1
+    mouseYclick = -((2/height)*(event.clientY-height)+1)
+
+
+    var catetoY = Math.abs(mouseYclick-posY);
+    var catetoX = Math.abs(mouseXclick-posX);
+    var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY))
+    deltaX = catetoX/hipote;
+    deltaY = catetoY/hipote;
+
+    console.log("Hipote: "+hipote)
+    console.log("Catetos: "+catetoX+","+catetoY)
+    console.log("Deltas: "+deltaX+","+deltaY)
+    //deltaX = Math.abs(catetoX/hipote);
+    //deltaY = Math.abs(catetoY/hipote);
+  });
 
   // Vertex shader program
 
@@ -102,6 +130,7 @@ function main() {
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   sphereO = new Sphere(1, 'Sphere', 30.85, 0.5);
+  sphereV = new Sphere(4, 'Sphere', 30.85, 0.1);
   cylinderO = new Cylinder(2, 'Cylinder', 2);
   cubeO = new Cube(3, 'Cube');
   var cyBuffers = cylinderO.initialize(gl);//initBuffers(gl);
@@ -163,11 +192,26 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   /*for (var i = 0; i < objects.length; i++) {
 
   }*/
-  sphereO.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0, 0.0, -16.0], textures);
+  var matriz = mat4.create();
+  mat4.copy(matriz, modelViewMatrix);
+  /*.translate( modelViewMatrix,  modelViewMatrix, [0.0, 0.0, -16.0]);
+  sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
+  mat4.translate( modelViewMatrix,  modelViewMatrix, [0.0, -2.0, -16.0]);
+  sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
+  */mat4.translate( modelViewMatrix,  modelViewMatrix, [posX, posY, -3.0]);
+  sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
+  /*for (var i = 5; i > -5; i--) {
+    //console.log(i);
+    mat4.translate( modelViewMatrix,  modelViewMatrix, [0.0, i, -16.0]);
+    //sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0, 5, -16.0], textures);  
+  }*/
+  //sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0, -5, -16.0], textures);
+  //sphereO.draw(gl, programInfo, matriz, projectionMatrix, buffers.sp, deltaTime, [0.0, 0.0, -16.0], textures);
+  
   //mat4.rotate(modelViewMatrix, modelViewMatrix, 3.14,[0, 0, 1]);
   //mat4.translate( modelViewMatrix,  modelViewMatrix, [3, -6.0, -4.0]);
-  cylinderO.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.cy, deltaTime, [-2.0, 0.0, -6.0], textures);
-  cubeO.draw(gl, programInfo, modelViewMatrix, buffers.cu, deltaTime, [-2.0, 0.0, -6.0]);
+  //cylinderO.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.cy, deltaTime, [-2.0, 0.0, -6.0], textures);
+  //cubeO.draw(gl, programInfo, modelViewMatrix, buffers.cu, deltaTime, [-2.0, 0.0, -6.0]);
   //sphereO.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers, deltaTime, [2.0, 0.0, -6.0], textures);
   
   //drawSphere(gl, programInfo, modelViewMatrix, projectionMatrix, buffers, deltaTime, [0, 0.0, -6.0], textures);
@@ -175,6 +219,23 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   // Update the rotation for the next draw
 
   cubeRotation += deltaTime;
+
+  if(posX != mouseXclick){
+    if(posX<mouseXclick){
+      posX+=deltaX*deltaTime;
+    }
+    if(posX>mouseXclick){
+      posX-=deltaX*deltaTime;
+    }   
+  }
+  if(posY != mouseYclick){
+    if(posY<mouseYclick){
+      posY+=deltaY*deltaTime;
+    }
+    if(posY>mouseYclick){
+      posY-=deltaY*deltaTime;
+    }   
+  }
 
 }
 

@@ -16,6 +16,22 @@ var posZ = 0.0;
 var deltaY = 0.0;
 var deltaX = 0.0;
 var deltaZ = 0.0;
+var mouseXclick2 = 0.0;
+var mouseYclick2 = 0.0;
+var mouseZclick2 = 0.0;
+var posX2 = 0.0;
+var posY2 = 0.0;
+var posZ2 = 0.0;
+var deltaY2 = 0.0;
+var deltaX2 = 0.0;
+var deltaZ2 = 0.0;
+
+
+//
+var numberOfObjects = 1;
+var objects = [];
+var spheresPositions = [];
+
 
 main();
 
@@ -33,31 +49,85 @@ function main() {
     return;
   }
 
+  for (var i = 0; i < numberOfObjects; i++) {
+      var sphereObject = new Sphere(i, 'Sphere', 30.85, 0.1);
+      objects.push(sphereObject);
+
+    }
+
+    for (var i = 0; i < numberOfObjects; i++) {
+      var positionObject = {};
+      positionObject.initX = 0.0;
+      positionObject.initY = 0.0;
+      positionObject.initZ = 0.0;
+      positionObject.randomX = (Math.random() * -1.5) + 1.5;
+      positionObject.randomY = (Math.random() * -1.5) + 1.5;
+      positionObject.randomZ = (Math.random() * -10) + 1;
+      
+      var catetoX = Math.abs(positionObject.randomX - positionObject.initX);
+      var catetoY = Math.abs(positionObject.randomY - positionObject.initY);
+      var catetoZ = Math.abs(positionObject.randomZ - positionObject.initZ);
+      var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ));
+
+
+
+      positionObject.deltaX = catetoX/hipote;
+      positionObject.deltaY = catetoY/hipote;
+      positionObject.deltaZ = catetoZ/hipote;
+
+      spheresPositions.push(positionObject);
+
+    }
+
   canvas.addEventListener("mouseup", function(event){
-    var width=canvas.width;
-    var height=canvas.height; 
+
+
+    
+    /*var width=canvas.width;
+    var height=canvas.height; -1 */ 
+    
+
     /*mouseXclick = Math.floor((Math.random() * -1.5) + 1.5);//(2/width)*(event.clientX-width)+1;
     mouseYclick = Math.floor((Math.random() * -1.5) + 1.5);//-((2/height)*(event.clientY-height)+1);
     mouseZclick = Math.floor((Math.random() * -10) + 1);*/
-    mouseXclick = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
+    
+    /*mouseXclick = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
     mouseYclick = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
-    mouseZclick = (Math.random() * -10) + 1;
+    mouseZclick = (Math.random() * -10) + 1; -1*/
 
-    console.log("Vars: "+mouseXclick+","+mouseYclick+","+mouseZclick);
+    //console.log("Vars: "+mouseXclick+","+mouseYclick+","+mouseZclick);
 
-    var catetoY = Math.abs(mouseYclick-posY);
+    /*var catetoY = Math.abs(mouseYclick-posY);
     var catetoX = Math.abs(mouseXclick-posX);
     var catetoZ = Math.abs(mouseZclick-posZ);
     var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
     deltaX = catetoX/hipote;
     deltaY = catetoY/hipote;
-    deltaZ = catetoZ/hipote;
+    deltaZ = catetoZ/hipote;-1*/
 
-    console.log("Hipote: "+hipote);
+    /*console.log("Hipote: "+hipote);
     console.log("Catetos: "+catetoX+","+catetoY+","+catetoZ);
-    console.log("Deltas: "+deltaX+","+deltaY+","+deltaZ);
+    console.log("Deltas: "+deltaX+","+deltaY+","+deltaZ);*/
     //deltaX = Math.abs(catetoX/hipote);
     //deltaY = Math.abs(catetoY/hipote);
+    
+    /*mouseXclick2 = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
+    mouseYclick2 = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
+    mouseZclick2 = (Math.random() * -10) + 1;-1*/
+
+    //console.log("Vars: "+mouseXclick2+","+mouseYclick2+","+mouseZclick2);
+
+    /*var catetoY2 = Math.abs(mouseYclick2-posY2);
+    var catetoX2 = Math.abs(mouseXclick2-posX2);
+    var catetoZ2 = Math.abs(mouseZclick2-posZ2);
+    var hipote2 = Math.sqrt((catetoX2*catetoX2)+(catetoY2*catetoY2)+(catetoZ2*catetoZ2))
+    deltaX2 = catetoX2/hipote2;
+    deltaY2 = catetoY2/hipote2;
+    deltaZ2 = catetoZ2/hipote2;-1*/
+
+    /*console.log("Hipote: "+hipote2);
+    console.log("Catetos: "+catetoX2+","+catetoY2+","+catetoZ2);
+    console.log("Deltas: "+deltaX2+","+deltaY2+","+deltaZ2);-1*/
   });
 
   // Vertex shader program
@@ -139,27 +209,29 @@ function main() {
   
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
-  sphereO = new Sphere(1, 'Sphere', 30.85, 0.5);
+  sphereO = new Sphere(1, 'Sphere', 30.85, 0.1);
   sphereV = new Sphere(4, 'Sphere', 30.85, 0.1);
   cylinderO = new Cylinder(2, 'Cylinder', 2);
   cubeO = new Cube(3, 'Cube');
   var cyBuffers = cylinderO.initialize(gl);//initBuffers(gl);
-  var sBuffers = sphereO.initialize(gl);
+  var soBuffers = sphereO.initialize(gl);
+  var svBuffers = sphereV.initialize(gl);
   var cuBuffers = cubeO.initialize(gl);
   var buffers = {};
   buffers.cy = cyBuffers;
-  buffers.sp = sBuffers;
+  buffers.spo = soBuffers;
+  buffers.spv = svBuffers;
   buffers.cu = cuBuffers;
   var then = 0;
-  var objects = [];
+  //var objects = [];
 
   // Draw the scene repeatedly
   function render(now) {
-    now *= 0.001;  // convert to seconds
+    now *= 0.003;  // convert to seconds
     const deltaTime = now - then;
     then = now;
 
-    drawScene(gl, programInfo, buffers, deltaTime, textures);
+    drawScene(gl, programInfo, buffers, deltaTime, textures, objects);
 
     requestAnimationFrame(render);
   }
@@ -199,86 +271,49 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   // the center of the scene.
   const modelViewMatrix = mat4.create();
 
-  /*for (var i = 0; i < objects.length; i++) {
+  for (var i = 0; i < numberOfObjects; i++) {
+    var matrix = mat4.create();
+    mat4.copy(matrix, modelViewMatrix);
+    var sphereObj = objects[i];
+    var positionObj = spheresPositions[i];
+    mat4.translate(matrix, matrix, [positionObj.randomX, positionObj.randomY, positionObj.randomZ]);
+    sphereObj.draw(gl, programInfo, matrix, projectionMatrix, sphereObj.initialize(gl), deltaTime, [0.0,0.0,-16.0], textures);
+    
+    /*if(positionObj.randomX != positionObj.initX){
+      if(positionObj.randomX<positionObj.initX){
+        positionObj.randomX+=positionObj.deltaX*deltaTime;
+      }
+      if(positionObj.randomX>positionObj.initX){
+        positionObj.randomX-=positionObj.deltaX*deltaTime;
+      }   
+    }
 
-  }*/
-  var matriz = mat4.create();
-  mat4.copy(matriz, modelViewMatrix);
-  /*.translate( modelViewMatrix,  modelViewMatrix, [0.0, 0.0, -16.0]);
-  sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
-  mat4.translate( modelViewMatrix,  modelViewMatrix, [0.0, -2.0, -16.0]);
-  sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
-  */mat4.translate( modelViewMatrix,  modelViewMatrix, [posX, posY, posZ]);
-  sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
-  /*for (var i = 5; i > -5; i--) {
-    //console.log(i);
-    mat4.translate( modelViewMatrix,  modelViewMatrix, [0.0, i, -16.0]);
-    //sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0, 5, -16.0], textures);  
-  }*/
-  //sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0, -5, -16.0], textures);
-  //sphereO.draw(gl, programInfo, matriz, projectionMatrix, buffers.sp, deltaTime, [0.0, 0.0, -16.0], textures);
-  
-  //mat4.rotate(modelViewMatrix, modelViewMatrix, 3.14,[0, 0, 1]);
-  //mat4.translate( modelViewMatrix,  modelViewMatrix, [3, -6.0, -4.0]);
-  //cylinderO.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.cy, deltaTime, [-2.0, 0.0, -6.0], textures);
-  //cubeO.draw(gl, programInfo, modelViewMatrix, buffers.cu, deltaTime, [-2.0, 0.0, -6.0]);
-  //sphereO.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers, deltaTime, [2.0, 0.0, -6.0], textures);
-  
-  //drawSphere(gl, programInfo, modelViewMatrix, projectionMatrix, buffers, deltaTime, [0, 0.0, -6.0], textures);
-  
+    if(positionObj.randomY != positionObj.initY){
+      if(positionObj.randomY<positionObj.initY){
+        positionObj.randomY+=positionObj.deltaY*deltaTime;
+      }
+      if(positionObj.randomY>positionObj.initY){
+        positionObj.randomY-=positionObj.deltaY*deltaTime;
+      }   
+    }
+    
+    if(positionObj.randomZ != positionObj.initZ){
+      if(positionObj.randomZ<positionObj.initZ){
+        positionObj.randomZ+=positionObj.deltaZ*deltaTime;
+      }
+      if(positionObj.randomZ>positionObj.initZ){
+        positionObj.randomZ-=positionObj.deltaZ*deltaTime;
+      }   
+    }*/
+
+  }
+
+  //Here goes temporal delete**
+
   // Update the rotation for the next draw
 
   cubeRotation += deltaTime;
-  var collision = false;
 
-  collision = ((posX >=1.0 || posX <= -1.0) || (posY >=1.0 || posY <= -1.0) || (posZ >=1.0 || posZ <= -10.0));
-
-  if (collision) {
-
-    mouseXclick = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
-    mouseYclick = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
-    mouseZclick = (Math.random() * -10) + 1;
-
-    console.log("Vars: "+mouseXclick+","+mouseYclick+","+mouseZclick);
-
-    var catetoY = Math.abs(mouseYclick-posY);
-    var catetoX = Math.abs(mouseXclick-posX);
-    var catetoZ = Math.abs(mouseZclick-posZ);
-    var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
-    deltaX = catetoX/hipote;
-    deltaY = catetoY/hipote;
-    deltaZ = catetoZ/hipote;
-
-    console.log("Hipote: "+hipote);
-    console.log("Catetos: "+catetoX+","+catetoY+","+catetoZ);
-    console.log("Deltas: "+deltaX+","+deltaY+","+deltaZ);
-
-  }
-  
-  if(posX != mouseXclick){
-    if(posX<mouseXclick){
-      posX+=deltaX*deltaTime;
-    }
-    if(posX>mouseXclick){
-      posX-=deltaX*deltaTime;
-    }   
-  }
-  if(posY != mouseYclick){
-    if(posY<mouseYclick){
-      posY+=deltaY*deltaTime;
-    }
-    if(posY>mouseYclick){
-      posY-=deltaY*deltaTime;
-    }   
-  }
-  if(posZ != mouseZclick){
-    if(posZ<mouseZclick){
-      posZ+=deltaZ*deltaTime;
-    }
-    if(posZ>mouseZclick){
-      posZ-=deltaZ*deltaTime;
-    }   
-  }
 
   
 

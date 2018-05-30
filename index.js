@@ -7,12 +7,15 @@ var sphereV;
 var cylinderO;
 var cubeO;
 var translation = [0.0, 0, -16.0];
-var mouseXclick = 5.0;
-var mouseYclick = 5.0;
+var mouseXclick = 0.0;
+var mouseYclick = 0.0;
+var mouseZclick = 0.0;
 var posX = 0.0;
 var posY = 0.0;
+var posZ = 0.0;
 var deltaY = 0.0;
 var deltaX = 0.0;
+var deltaZ = 0.0;
 
 main();
 
@@ -33,19 +36,26 @@ function main() {
   canvas.addEventListener("mouseup", function(event){
     var width=canvas.width;
     var height=canvas.height; 
-    mouseXclick = (2/width)*(event.clientX-width)+1
-    mouseYclick = -((2/height)*(event.clientY-height)+1)
+    /*mouseXclick = Math.floor((Math.random() * -1.5) + 1.5);//(2/width)*(event.clientX-width)+1;
+    mouseYclick = Math.floor((Math.random() * -1.5) + 1.5);//-((2/height)*(event.clientY-height)+1);
+    mouseZclick = Math.floor((Math.random() * -10) + 1);*/
+    mouseXclick = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
+    mouseYclick = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
+    mouseZclick = (Math.random() * -10) + 1;
 
+    console.log("Vars: "+mouseXclick+","+mouseYclick+","+mouseZclick);
 
     var catetoY = Math.abs(mouseYclick-posY);
     var catetoX = Math.abs(mouseXclick-posX);
-    var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY))
+    var catetoZ = Math.abs(mouseZclick-posZ);
+    var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
     deltaX = catetoX/hipote;
     deltaY = catetoY/hipote;
+    deltaZ = catetoZ/hipote;
 
-    console.log("Hipote: "+hipote)
-    console.log("Catetos: "+catetoX+","+catetoY)
-    console.log("Deltas: "+deltaX+","+deltaY)
+    console.log("Hipote: "+hipote);
+    console.log("Catetos: "+catetoX+","+catetoY+","+catetoZ);
+    console.log("Deltas: "+deltaX+","+deltaY+","+deltaZ);
     //deltaX = Math.abs(catetoX/hipote);
     //deltaY = Math.abs(catetoY/hipote);
   });
@@ -198,7 +208,7 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
   mat4.translate( modelViewMatrix,  modelViewMatrix, [0.0, -2.0, -16.0]);
   sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
-  */mat4.translate( modelViewMatrix,  modelViewMatrix, [posX, posY, -3.0]);
+  */mat4.translate( modelViewMatrix,  modelViewMatrix, [posX, posY, posZ]);
   sphereV.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sp, deltaTime, [0.0,0.0,-16.0], textures);
   /*for (var i = 5; i > -5; i--) {
     //console.log(i);
@@ -219,7 +229,32 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   // Update the rotation for the next draw
 
   cubeRotation += deltaTime;
+  var collision = false;
 
+  collision = ((posX >=1.0 || posX <= -1.0) || (posY >=1.0 || posY <= -1.0) || (posZ >=1.0 || posZ <= -10.0));
+
+  if (collision) {
+
+    mouseXclick = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
+    mouseYclick = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
+    mouseZclick = (Math.random() * -10) + 1;
+
+    console.log("Vars: "+mouseXclick+","+mouseYclick+","+mouseZclick);
+
+    var catetoY = Math.abs(mouseYclick-posY);
+    var catetoX = Math.abs(mouseXclick-posX);
+    var catetoZ = Math.abs(mouseZclick-posZ);
+    var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
+    deltaX = catetoX/hipote;
+    deltaY = catetoY/hipote;
+    deltaZ = catetoZ/hipote;
+
+    console.log("Hipote: "+hipote);
+    console.log("Catetos: "+catetoX+","+catetoY+","+catetoZ);
+    console.log("Deltas: "+deltaX+","+deltaY+","+deltaZ);
+
+  }
+  
   if(posX != mouseXclick){
     if(posX<mouseXclick){
       posX+=deltaX*deltaTime;
@@ -236,6 +271,16 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
       posY-=deltaY*deltaTime;
     }   
   }
+  if(posZ != mouseZclick){
+    if(posZ<mouseZclick){
+      posZ+=deltaZ*deltaTime;
+    }
+    if(posZ>mouseZclick){
+      posZ-=deltaZ*deltaTime;
+    }   
+  }
+
+  
 
 }
 

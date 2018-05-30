@@ -2,37 +2,21 @@ var cubeRotation = 0.0;
 var rAmbientLight = 0.1, gAmbientLight = 0.1, bAmbientLight = 0.1;
 var rDirectional = 1.0, gDirectional = 1.0, bDirectional = 1.0;
 var directional = [1.0, 1.0, 1.0];
-var sphereO;
-var sphereV;
-var cylinderO;
-var cubeO;
-var translation = [0.0, 0, -16.0];
-var mouseXclick = 0.0;
-var mouseYclick = 0.0;
-var mouseZclick = 0.0;
-var posX = 0.0;
-var posY = 0.0;
-var posZ = 0.0;
-var deltaY = 0.0;
-var deltaX = 0.0;
-var deltaZ = 0.0;
-var mouseXclick2 = 0.0;
-var mouseYclick2 = 0.0;
-var mouseZclick2 = 0.0;
-var posX2 = 0.0;
-var posY2 = 0.0;
-var posZ2 = 0.0;
-var deltaY2 = 0.0;
-var deltaX2 = 0.0;
-var deltaZ2 = 0.0;
 
-
-//
-var numberOfObjects = 2;
-var objects = [];
-var spheresPositions = [];
-var matrices = [];
-
+//Declaration of spheres
+var sphereA, sphereB, sphereC, sphereD, sphereE;
+//Declaration of initial positions
+var posInitX_A = 0.0, posInitX_B = 0.0, posInitX_C = 0.0, posInitX_D = 0.0, posInitX_E = 0.0;
+var posInitY_A = 0.0, posInitY_B = 0.0, posInitY_C = 0.0, posInitY_D = 0.0, posInitY_E = 0.0;
+var posInitZ_A = 0.0, posInitZ_B = 0.0, posInitZ_C = 0.0, posInitZ_D = 0.0, posInitZ_E = 0.0;
+//Declaration of random positions
+var posRandomX_A = 0.0, posRandomX_B = 0.0, posRandomX_C = 0.0, posRandomX_D = 0.0, posRandomX_E = 0.0;
+var posRandomY_A = 0.0, posRandomY_B = 0.0, posRandomY_C = 0.0, posRandomY_D = 0.0, posRandomY_E = 0.0;
+var posRandomZ_A = 0.0, posRandomZ_B = 0.0, posRandomZ_C = 0.0, posRandomZ_D = 0.0, posRandomZ_E = 0.0;
+//Declaration of deltas for positions
+var deltaX_A = 0.0, deltaX_B = 0.0, deltaX_C = 0.0, deltaX_D = 0.0, deltaX_E = 0.0;
+var deltaY_A = 0.0, deltaY_B = 0.0, deltaY_C = 0.0, deltaY_D = 0.0, deltaY_E = 0.0;
+var deltaZ_A = 0.0, deltaZ_B = 0.0, deltaZ_C = 0.0, deltaZ_D = 0.0, deltaZ_E = 0.0;
 
 main();
 
@@ -50,85 +34,69 @@ function main() {
     return;
   }
 
-  for (var i = 0; i < numberOfObjects; i++) {
-      var sphereObject = new Sphere(i, 'Sphere', 30.85, 0.1);
-      objects.push(sphereObject);
-
-    }
-
-    for (var i = 0; i < numberOfObjects; i++) {
-      var positionObject = {};
-      positionObject.initX = 0.0;
-      positionObject.initY = 0.0;
-      positionObject.initZ = 0.0;
-      positionObject.randomX = (Math.random() * -1.5) + 1.5;
-      positionObject.randomY = (Math.random() * -1.5) + 1.5;
-      positionObject.randomZ = (Math.random() * -10) + 1;
-      
-      var catetoX = Math.abs(positionObject.randomX - positionObject.initX);
-      var catetoY = Math.abs(positionObject.randomY - positionObject.initY);
-      var catetoZ = Math.abs(positionObject.randomZ - positionObject.initZ);
-      var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ));
-
-
-
-      positionObject.deltaX = catetoX/hipote;
-      positionObject.deltaY = catetoY/hipote;
-      positionObject.deltaZ = catetoZ/hipote;
-
-      spheresPositions.push(positionObject);
-
-    }
-
   canvas.addEventListener("mouseup", function(event){
 
+    posRandomX_A = (Math.random() * -1.5) + 1.5;
+    posRandomX_B = (Math.random() * -1.5) + 1.5;
+    posRandomX_C = (Math.random() * -1.5) + 1.5;
+    posRandomX_D = (Math.random() * -1.5) + 1.5;
+    posRandomX_E = (Math.random() * -1.5) + 1.5;
 
-    
-    /*var width=canvas.width;
-    var height=canvas.height; -1 */ 
-    
+    posRandomY_A = (Math.random() * -1.5) + 1.5;
+    posRandomY_B = (Math.random() * -1.5) + 1.5;
+    posRandomY_C = (Math.random() * -1.5) + 1.5;
+    posRandomY_D = (Math.random() * -1.5) + 1.5;
+    posRandomY_E = (Math.random() * -1.5) + 1.5;
 
-    /*mouseXclick = Math.floor((Math.random() * -1.5) + 1.5);//(2/width)*(event.clientX-width)+1;
-    mouseYclick = Math.floor((Math.random() * -1.5) + 1.5);//-((2/height)*(event.clientY-height)+1);
-    mouseZclick = Math.floor((Math.random() * -10) + 1);*/
-    
-    /*mouseXclick = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
-    mouseYclick = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
-    mouseZclick = (Math.random() * -10) + 1; -1*/
+    posRandomZ_A = (Math.random() * -10) + 1;
+    posRandomZ_B = (Math.random() * -10) + 1;
+    posRandomZ_C = (Math.random() * -10) + 1;
+    posRandomZ_D = (Math.random() * -10) + 1;
+    posRandomZ_E = (Math.random() * -10) + 1;
 
-    //console.log("Vars: "+mouseXclick+","+mouseYclick+","+mouseZclick);
+    var cathetusX_A = Math.abs(posRandomX_A-posInitX_A);
+    var cathetusX_B = Math.abs(posRandomX_B-posInitX_B);
+    var cathetusX_C = Math.abs(posRandomX_C-posInitX_C);
+    var cathetusX_D = Math.abs(posRandomX_D-posInitX_D);
+    var cathetusX_E = Math.abs(posRandomX_E-posInitX_E);
 
-    /*var catetoY = Math.abs(mouseYclick-posY);
-    var catetoX = Math.abs(mouseXclick-posX);
-    var catetoZ = Math.abs(mouseZclick-posZ);
-    var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
-    deltaX = catetoX/hipote;
-    deltaY = catetoY/hipote;
-    deltaZ = catetoZ/hipote;-1*/
+    var cathetusY_A = Math.abs(posRandomY_A-posInitY_A);
+    var cathetusY_B = Math.abs(posRandomY_B-posInitY_B);
+    var cathetusY_C = Math.abs(posRandomY_C-posInitY_C);
+    var cathetusY_D = Math.abs(posRandomY_D-posInitY_D);
+    var cathetusY_E = Math.abs(posRandomY_E-posInitY_E);
 
-    /*console.log("Hipote: "+hipote);
-    console.log("Catetos: "+catetoX+","+catetoY+","+catetoZ);
-    console.log("Deltas: "+deltaX+","+deltaY+","+deltaZ);*/
-    //deltaX = Math.abs(catetoX/hipote);
-    //deltaY = Math.abs(catetoY/hipote);
-    
-    /*mouseXclick2 = (Math.random() * -1.5) + 1.5;//(2/width)*(event.clientX-width)+1;
-    mouseYclick2 = (Math.random() * -1.5) + 1.5;//-((2/height)*(event.clientY-height)+1);
-    mouseZclick2 = (Math.random() * -10) + 1;-1*/
+    var cathetusZ_A = Math.abs(posRandomZ_A-posInitZ_A);
+    var cathetusZ_B = Math.abs(posRandomZ_B-posInitZ_B);
+    var cathetusZ_C = Math.abs(posRandomZ_C-posInitZ_C);
+    var cathetusZ_D = Math.abs(posRandomZ_D-posInitZ_D);
+    var cathetusZ_E = Math.abs(posRandomZ_E-posInitZ_E);
 
-    //console.log("Vars: "+mouseXclick2+","+mouseYclick2+","+mouseZclick2);
+    var hypotenuseA = Math.sqrt((cathetusX_A*cathetusX_A)+(cathetusY_A*cathetusY_A)+(cathetusZ_A*cathetusZ_A));
+    var hypotenuseB = Math.sqrt((cathetusX_B*cathetusX_B)+(cathetusY_B*cathetusY_B)+(cathetusZ_B*cathetusZ_B));
+    var hypotenuseC = Math.sqrt((cathetusX_C*cathetusX_C)+(cathetusY_C*cathetusY_C)+(cathetusZ_C*cathetusZ_C));
+    var hypotenuseD = Math.sqrt((cathetusX_D*cathetusX_D)+(cathetusY_D*cathetusY_D)+(cathetusZ_D*cathetusZ_D));
+    var hypotenuseE = Math.sqrt((cathetusX_E*cathetusX_E)+(cathetusY_E*cathetusY_E)+(cathetusZ_E*cathetusZ_E));
 
-    /*var catetoY2 = Math.abs(mouseYclick2-posY2);
-    var catetoX2 = Math.abs(mouseXclick2-posX2);
-    var catetoZ2 = Math.abs(mouseZclick2-posZ2);
-    var hipote2 = Math.sqrt((catetoX2*catetoX2)+(catetoY2*catetoY2)+(catetoZ2*catetoZ2))
-    deltaX2 = catetoX2/hipote2;
-    deltaY2 = catetoY2/hipote2;
-    deltaZ2 = catetoZ2/hipote2;-1*/
+    deltaX_A = cathetusX_A / hypotenuseA;
+    deltaY_A = cathetusY_A / hypotenuseA;
+    deltaZ_A = cathetusZ_A / hypotenuseA;
 
-    /*console.log("Hipote: "+hipote2);
-    console.log("Catetos: "+catetoX2+","+catetoY2+","+catetoZ2);
-    console.log("Deltas: "+deltaX2+","+deltaY2+","+deltaZ2);-1*/
+    deltaX_B = cathetusX_B / hypotenuseB;
+    deltaY_B = cathetusY_B / hypotenuseB;
+    deltaZ_B = cathetusZ_B / hypotenuseB;
+
+    deltaX_C = cathetusX_C / hypotenuseC;
+    deltaY_C = cathetusY_C / hypotenuseC;
+    deltaZ_C = cathetusZ_C / hypotenuseC;
+
+    deltaX_D = cathetusX_D / hypotenuseD;
+    deltaY_D = cathetusY_D / hypotenuseD;
+    deltaZ_D = cathetusZ_D / hypotenuseD;
+
+    deltaX_E = cathetusX_E / hypotenuseE;
+    deltaY_E = cathetusY_E / hypotenuseE;
+    deltaZ_E = cathetusZ_E / hypotenuseE;
   });
 
   // Vertex shader program
@@ -207,26 +175,21 @@ function main() {
   
   const textures = {};
   textures.sphere = Utils.initTexture(gl, sphereTextureUrl);
-  
-  // Here's where we call the routine that builds all the
-  // objects we'll be drawing.
-  /*sphereO = new Sphere(1, 'Sphere', 30.85, 0.1);
-  sphereV = new Sphere(4, 'Sphere', 30.85, 0.1);
-  cylinderO = new Cylinder(2, 'Cylinder', 2);
-  cubeO = new Cube(3, 'Cube');
-  var cyBuffers = cylinderO.initialize(gl);//initBuffers(gl);
-  var soBuffers = sphereO.initialize(gl);
-  var svBuffers = sphereV.initialize(gl);
-  var cuBuffers = cubeO.initialize(gl);
+
+  //Initialize spheres
+  sphereA = new Sphere(1, 'Sphere', 30.85, 0.1);
+  sphereB = new Sphere(2, 'Sphere', 30.85, 0.1);
+  sphereC = new Sphere(3, 'Sphere', 30.85, 0.1);
+  sphereD = new Sphere(4, 'Sphere', 30.85, 0.1);
+  sphereE = new Sphere(5, 'Sphere', 30.85, 0.1);
+
   var buffers = {};
-  buffers.cy = cyBuffers;
-  buffers.spo = soBuffers;
-  buffers.spv = svBuffers;
-  buffers.cu = cuBuffers;*/
-  var buffers = [];
-  for (var i = 0; i < numberOfObjects; i++) {
-    buffers.push(objects[i].initialize(gl));
-  }
+  buffers.sa = sphereA.initialize(gl);
+  buffers.sb = sphereB.initialize(gl);
+  buffers.sc = sphereC.initialize(gl);
+  buffers.sd = sphereD.initialize(gl);
+  buffers.se = sphereE.initialize(gl);
+
   var then = 0;
 
   // Draw the scene repeatedly
@@ -235,7 +198,7 @@ function main() {
     const deltaTime = now - then;
     then = now;
 
-    drawScene(gl, programInfo, buffers, deltaTime, textures, objects);
+    drawScene(gl, programInfo, buffers, deltaTime, textures);
 
     requestAnimationFrame(render);
   }
@@ -273,80 +236,287 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
-  matrices = [];
   const modelViewMatrix = mat4.create();
-  matrices.push(modelViewMatrix);
+  var matrixB = mat4.create();
+  mat4.copy(matrixB, modelViewMatrix);
+  var matrixC = mat4.create();
+  mat4.copy(matrixC, modelViewMatrix);
+  var matrixD = mat4.create();
+  mat4.copy(matrixD, modelViewMatrix);
+  var matrixE = mat4.create();
+  mat4.copy(matrixE, modelViewMatrix);
 
-  if (numberOfObjects>1) {
-    for (var j = 1; j < numberOfObjects; j++) {
-      var matrix = mat4.create();
-      mat4.copy(matrix, modelViewMatrix);
-      matrices.push(matrix);
-    }  
+  mat4.translate( modelViewMatrix,  modelViewMatrix, [posInitX_A, posInitY_A, posInitZ_A]);
+  sphereA.draw(gl, programInfo, modelViewMatrix, projectionMatrix, buffers.sa, deltaTime, [0.0,0.0,-16.0], textures);
+
+  mat4.translate( matrixB,  matrixB, [posInitX_B, posInitY_B, posInitZ_B]);
+  sphereB.draw(gl, programInfo, matrixB, projectionMatrix, buffers.sb, deltaTime, [0.0,0.0,-16.0], textures);
+
+  mat4.translate( matrixC,  matrixC, [posInitX_C, posInitY_C, posInitZ_C]);
+  sphereC.draw(gl, programInfo, matrixC, projectionMatrix, buffers.sc, deltaTime, [0.0,0.0,-16.0], textures);
+
+  mat4.translate( matrixD,  matrixD, [posInitX_D, posInitY_D, posInitZ_D]);
+  sphereD.draw(gl, programInfo, matrixD, projectionMatrix, buffers.sd, deltaTime, [0.0,0.0,-16.0], textures);
+
+  mat4.translate( matrixE,  matrixE, [posInitX_E, posInitY_E, posInitZ_E]);
+  sphereE.draw(gl, programInfo, matrixE, projectionMatrix, buffers.se, deltaTime, [0.0,0.0,-16.0], textures);
+
+  //Check for collisions
+
+  var collisionAWithPlane = Utils.collisionWithPlane(0.1, 0.1, posInitX_A, posInitY_A, posInitZ_A);
+  var collisionAWithB = Utils.collisionWithSphere(0.1, 0.1, posInitX_A, posInitY_A, posInitZ_A, posInitX_B, posInitY_B, posInitZ_B);
+  var collisionAWithC = Utils.collisionWithSphere(0.1, 0.1, posInitX_A, posInitY_A, posInitZ_A, posInitX_C, posInitY_C, posInitZ_C);
+  var collisionAWithD = Utils.collisionWithSphere(0.1, 0.1, posInitX_A, posInitY_A, posInitZ_A, posInitX_D, posInitY_D, posInitZ_D);
+  var collisionAWithE = Utils.collisionWithSphere(0.1, 0.1, posInitX_A, posInitY_A, posInitZ_A, posInitX_E, posInitY_E, posInitZ_E);
+
+  if (collisionAWithPlane || collisionAWithB || collisionAWithC || collisionAWithD || collisionAWithE) {
+
+    posRandomX_A = (Math.random() * -1.5) + 1.5;
+    posRandomY_A = (Math.random() * -1.5) + 1.5;
+    posRandomZ_A = (Math.random() * -10) + 1;
+    
+    var cathetusX_A = Math.abs(posRandomX_A-posInitX_A);
+    var cathetusY_A = Math.abs(posRandomY_A-posInitY_A);
+    var cathetusZ_A = Math.abs(posRandomZ_A-posInitZ_A);
+    var hypotenuseA = Math.sqrt((cathetusX_A*cathetusX_A)+(cathetusY_A*cathetusY_A)+(cathetusZ_A*cathetusZ_A));
+    
+    deltaX_A = cathetusX_A / hypotenuseA;
+    deltaY_A = cathetusY_A / hypotenuseA;
+    deltaZ_A = cathetusZ_A / hypotenuseA;
+
   }
 
+  var collisionBWithPlane = Utils.collisionWithPlane(0.1, 0.1, posInitX_B, posInitY_B, posInitZ_B);
+  var collisionBWithA = Utils.collisionWithSphere(0.1, 0.1, posInitX_B, posInitY_B, posInitZ_B, posInitX_A, posInitY_A, posInitZ_A);
+  var collisionBWithC = Utils.collisionWithSphere(0.1, 0.1, posInitX_B, posInitY_B, posInitZ_B, posInitX_C, posInitY_C, posInitZ_C);
+  var collisionBWithD = Utils.collisionWithSphere(0.1, 0.1, posInitX_B, posInitY_B, posInitZ_B, posInitX_D, posInitY_D, posInitZ_D);
+  var collisionBWithE = Utils.collisionWithSphere(0.1, 0.1, posInitX_B, posInitY_B, posInitZ_B, posInitX_E, posInitY_E, posInitZ_E);
 
-  for (var i = 0; i < numberOfObjects; i++) {
-    var sphereObj = objects[i];
-    //console.log(sphereObj);
-    var positionObj = spheresPositions[i];
-    //console.log(positionObj);
-    mat4.translate(matrices[i], matrices[i], [positionObj.randomX, positionObj.randomY, positionObj.randomZ]);
-    sphereObj.draw(gl, programInfo, matrices[i], projectionMatrix, buffers[i], deltaTime, [0.0,0.0,-16.0], textures);
+  if (collisionBWithPlane || collisionBWithA || collisionBWithC || collisionBWithD || collisionBWithE) {
 
-    var collision = false;
-    collision = ((positionObj.randomX >=1.0 || positionObj.randomX <= -1.0) || (positionObj.randomY >=1.0 || positionObj.randomY <= -1.0) || (positionObj.randomZ >=1.0 || positionObj.randomZ <= -10.0));
+    posRandomX_B = (Math.random() * -1.5) + 1.5;
+    posRandomY_B = (Math.random() * -1.5) + 1.5;
+    posRandomZ_B = (Math.random() * -10) + 1;
     
-    if (collision) {
-
-      positionObj.randomX = (Math.random() * -1.5) + 1.5;
-      positionObj.randomY = (Math.random() * -1.5) + 1.5;
-      positionObj.randomZ = (Math.random() * -10) + 1;
-
-      var catetoX = Math.abs(positionObj.randomX-positionObj.initX);
-      var catetoY = Math.abs(positionObj.randomY-positionObj.initY);
-      var catetoZ = Math.abs(positionObj.randomZ-positionObj.initZ);
-      var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
-      positionObj.deltaX = catetoX/hipote;
-      positionObj.deltaY = catetoY/hipote;
-      positionObj.deltaZ = catetoZ/hipote;
-
-    }
-
-    if(positionObj.randomX != positionObj.initX){
-      if(positionObj.randomX<positionObj.initX){
-        positionObj.randomX+=positionObj.deltaX*deltaTime;
-      }
-      if(positionObj.randomX>positionObj.initX){
-        positionObj.randomX-=positionObj.deltaX*deltaTime;
-      }   
-    }
-
-    if(positionObj.randomY != positionObj.initY){
-      if(positionObj.randomY<positionObj.initY){
-        positionObj.randomY+=positionObj.deltaY*deltaTime;
-      }
-      if(positionObj.randomY>positionObj.initY){
-        positionObj.randomY-=positionObj.deltaY*deltaTime;
-      }   
-    }
+    var cathetusX_B = Math.abs(posRandomX_B-posInitX_B);
+    var cathetusY_B = Math.abs(posRandomY_B-posInitY_B);
+    var cathetusZ_B = Math.abs(posRandomZ_B-posInitZ_B);
+    var hypotenuseB = Math.sqrt((cathetusX_B*cathetusX_B)+(cathetusY_B*cathetusY_B)+(cathetusZ_B*cathetusZ_B));
     
-    if(positionObj.randomZ != positionObj.initZ){
-      if(positionObj.randomZ<positionObj.initZ){
-        positionObj.randomZ+=positionObj.deltaZ*deltaTime;
-      }
-      if(positionObj.randomZ>positionObj.initZ){
-        positionObj.randomZ-=positionObj.deltaZ*deltaTime;
-      }   
-    }
+    deltaX_B = cathetusX_B / hypotenuseB;
+    deltaY_B = cathetusY_B / hypotenuseB;
+    deltaZ_B = cathetusZ_B / hypotenuseB;
 
   }
+
+  var collisionCWithPlane = Utils.collisionWithPlane(0.1, 0.1, posInitX_C, posInitY_C, posInitZ_C);
+  var collisionCWithB = Utils.collisionWithSphere(0.1, 0.1, posInitX_C, posInitY_C, posInitZ_C, posInitX_B, posInitY_B, posInitZ_B);
+  var collisionCWithA = Utils.collisionWithSphere(0.1, 0.1, posInitX_C, posInitY_C, posInitZ_C, posInitX_A, posInitY_A, posInitZ_A);
+  var collisionCWithD = Utils.collisionWithSphere(0.1, 0.1, posInitX_C, posInitY_C, posInitZ_C, posInitX_D, posInitY_D, posInitZ_D);
+  var collisionCWithE = Utils.collisionWithSphere(0.1, 0.1, posInitX_C, posInitY_C, posInitZ_C, posInitX_E, posInitY_E, posInitZ_E);
+
+  if (collisionCWithPlane || collisionCWithB || collisionCWithA || collisionCWithD || collisionCWithE) {
+
+    posRandomX_C = (Math.random() * -1.5) + 1.5;
+    posRandomY_C = (Math.random() * -1.5) + 1.5;
+    posRandomZ_C = (Math.random() * -10) + 1;
+    
+    var cathetusX_C = Math.abs(posRandomX_C-posInitX_C);
+    var cathetusY_C = Math.abs(posRandomY_C-posInitY_C);
+    var cathetusZ_C = Math.abs(posRandomZ_C-posInitZ_C);
+    var hypotenuseC = Math.sqrt((cathetusX_C*cathetusX_C)+(cathetusY_C*cathetusY_C)+(cathetusZ_C*cathetusZ_C));
+    
+    deltaX_C = cathetusX_C / hypotenuseC;
+    deltaY_C = cathetusY_C / hypotenuseC;
+    deltaZ_C = cathetusZ_C / hypotenuseC;
+
+  }
+
+  var collisionDWithPlane = Utils.collisionWithPlane(0.1, 0.1, posInitX_D, posInitY_D, posInitZ_D);
+  var collisionDWithB = Utils.collisionWithSphere(0.1, 0.1, posInitX_D, posInitY_D, posInitZ_D, posInitX_B, posInitY_B, posInitZ_B);
+  var collisionDWithC = Utils.collisionWithSphere(0.1, 0.1, posInitX_D, posInitY_D, posInitZ_D, posInitX_C, posInitY_C, posInitZ_C);
+  var collisionDWithA = Utils.collisionWithSphere(0.1, 0.1, posInitX_D, posInitY_D, posInitZ_D, posInitX_A, posInitY_A, posInitZ_A);
+  var collisionDWithE = Utils.collisionWithSphere(0.1, 0.1, posInitX_D, posInitY_D, posInitZ_D, posInitX_E, posInitY_E, posInitZ_E);
+
+  if (collisionDWithPlane || collisionDWithB || collisionDWithC || collisionDWithA || collisionDWithE) {
+
+    posRandomX_D = (Math.random() * -1.5) + 1.5;
+    posRandomY_D = (Math.random() * -1.5) + 1.5;
+    posRandomZ_D = (Math.random() * -10) + 1;
+    
+    var cathetusX_D = Math.abs(posRandomX_D-posInitX_D);
+    var cathetusY_D = Math.abs(posRandomY_D-posInitY_D);
+    var cathetusZ_D = Math.abs(posRandomZ_D-posInitZ_D);
+    var hypotenuseD = Math.sqrt((cathetusX_D*cathetusX_D)+(cathetusY_D*cathetusY_D)+(cathetusZ_D*cathetusZ_D));
+    
+    deltaX_D = cathetusX_D / hypotenuseD;
+    deltaY_D = cathetusY_D / hypotenuseD;
+    deltaZ_D = cathetusZ_D / hypotenuseD;
+
+  }
+  
+  var collisionEWithPlane = Utils.collisionWithPlane(0.1, 0.1, posInitX_E, posInitY_E, posInitZ_E);
+  var collisionEWithB = Utils.collisionWithSphere(0.1, 0.1, posInitX_E, posInitY_E, posInitZ_E, posInitX_B, posInitY_B, posInitZ_B);
+  var collisionEWithC = Utils.collisionWithSphere(0.1, 0.1, posInitX_E, posInitY_E, posInitZ_E, posInitX_C, posInitY_C, posInitZ_C);
+  var collisionEWithD = Utils.collisionWithSphere(0.1, 0.1, posInitX_E, posInitY_E, posInitZ_E, posInitX_D, posInitY_D, posInitZ_D);
+  var collisionEWithA = Utils.collisionWithSphere(0.1, 0.1, posInitX_E, posInitY_E, posInitZ_E, posInitX_A, posInitY_A, posInitZ_A);
+
+  if (collisionEWithPlane || collisionEWithB || collisionEWithC || collisionEWithD || collisionEWithA) {
+
+    posRandomX_E = (Math.random() * -1.5) + 1.5;
+    posRandomY_E = (Math.random() * -1.5) + 1.5;
+    posRandomZ_E = (Math.random() * -10) + 1;
+    
+    var cathetusX_E = Math.abs(posRandomX_E-posInitX_E);
+    var cathetusY_E = Math.abs(posRandomY_E-posInitY_E);
+    var cathetusZ_E = Math.abs(posRandomZ_E-posInitZ_E);
+    var hypotenuseE = Math.sqrt((cathetusX_E*cathetusX_E)+(cathetusY_E*cathetusY_E)+(cathetusZ_E*cathetusZ_E));
+    
+    deltaX_E = cathetusX_E / hypotenuseE;
+    deltaY_E = cathetusY_E / hypotenuseE;
+    deltaZ_E = cathetusZ_E / hypotenuseE;
+
+  }
+
+  
+  //Update positions
+
+  if(posInitX_A != posRandomX_A){
+    if(posInitX_A<posRandomX_A){
+      posInitX_A+=deltaX_A*deltaTime;
+    }
+    if(posInitX_A>posRandomX_A){
+      posInitX_A-=deltaX_A*deltaTime;
+    }   
+  }
+  if(posInitY_A != posRandomY_A){
+    if(posInitY_A<posRandomY_A){
+      posInitY_A+=deltaY_A*deltaTime;
+    }
+    if(posInitY_A>posRandomY_A){
+      posInitY_A-=deltaY_A*deltaTime;
+    }   
+  }
+  if(posInitZ_A != posRandomZ_A){
+    if(posInitZ_A<posRandomZ_A){
+      posInitZ_A+=deltaZ_A*deltaTime;
+    }
+    if(posInitZ_A>posRandomZ_A){
+      posInitZ_A-=deltaZ_A*deltaTime;
+    }   
+  }
+
+  //Sphere B
+  if(posInitX_B != posRandomX_B){
+    if(posInitX_B<posRandomX_B){
+      posInitX_B+=deltaX_B*deltaTime;
+    }
+    if(posInitX_B>posRandomX_B){
+      posInitX_B-=deltaX_B*deltaTime;
+    }   
+  }
+  if(posInitY_B != posRandomY_B){
+    if(posInitY_B<posRandomY_B){
+      posInitY_B+=deltaY_B*deltaTime;
+    }
+    if(posInitY_B>posRandomY_B){
+      posInitY_B-=deltaY_B*deltaTime;
+    }   
+  }
+  if(posInitZ_B != posRandomZ_B){
+    if(posInitZ_B<posRandomZ_B){
+      posInitZ_B+=deltaZ_B*deltaTime;
+    }
+    if(posInitZ_B>posRandomZ_B){
+      posInitZ_B-=deltaZ_B*deltaTime;
+    }   
+  }
+
+  //Sphere C
+  if(posInitX_C != posRandomX_C){
+    if(posInitX_C<posRandomX_C){
+      posInitX_C+=deltaX_C*deltaTime;
+    }
+    if(posInitX_C>posRandomX_C){
+      posInitX_C-=deltaX_C*deltaTime;
+    }   
+  }
+  if(posInitY_C != posRandomY_C){
+    if(posInitY_C<posRandomY_C){
+      posInitY_C+=deltaY_C*deltaTime;
+    }
+    if(posInitY_C>posRandomY_C){
+      posInitY_C-=deltaY_C*deltaTime;
+    }   
+  }
+  if(posInitZ_C != posRandomZ_C){
+    if(posInitZ_C<posRandomZ_C){
+      posInitZ_C+=deltaZ_C*deltaTime;
+    }
+    if(posInitZ_C>posRandomZ_C){
+      posInitZ_C-=deltaZ_C*deltaTime;
+    }   
+  }
+
+  //Sphere D
+  if(posInitX_D != posRandomX_D){
+    if(posInitX_D<posRandomX_D){
+      posInitX_D+=deltaX_D*deltaTime;
+    }
+    if(posInitX_D>posRandomX_D){
+      posInitX_D-=deltaX_D*deltaTime;
+    }   
+  }
+  if(posInitY_D != posRandomY_D){
+    if(posInitY_D<posRandomY_D){
+      posInitY_D+=deltaY_D*deltaTime;
+    }
+    if(posInitY_D>posRandomY_D){
+      posInitY_D-=deltaY_D*deltaTime;
+    }   
+  }
+  if(posInitZ_D != posRandomZ_D){
+    if(posInitZ_D<posRandomZ_D){
+      posInitZ_D+=deltaZ_D*deltaTime;
+    }
+    if(posInitZ_D>posRandomZ_D){
+      posInitZ_D-=deltaZ_D*deltaTime;
+    }   
+  }
+
+  //Sphere E
+  if(posInitX_E != posRandomX_E){
+    if(posInitX_E<posRandomX_E){
+      posInitX_E+=deltaX_E*deltaTime;
+    }
+    if(posInitX_E>posRandomX_E){
+      posInitX_E-=deltaX_E*deltaTime;
+    }   
+  }
+  if(posInitY_E != posRandomY_E){
+    if(posInitY_E<posRandomY_E){
+      posInitY_E+=deltaY_E*deltaTime;
+    }
+    if(posInitY_E>posRandomY_E){
+      posInitY_E-=deltaY_E*deltaTime;
+    }   
+  }
+  if(posInitZ_E != posRandomZ_E){
+    if(posInitZ_E<posRandomZ_E){
+      posInitZ_E+=deltaZ_E*deltaTime;
+    }
+    if(posInitZ_E>posRandomZ_E){
+      posInitZ_E-=deltaZ_E*deltaTime;
+    }   
+  }
+
+  // Update the rotation for the next draw
+  cubeRotation += deltaTime;
+
 
   //Here goes temporal delete**
 
-  // Update the rotation for the next draw
-
-  cubeRotation += deltaTime;
+  
 
 
   

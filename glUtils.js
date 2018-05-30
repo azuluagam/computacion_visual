@@ -103,4 +103,13 @@ class Utils {
 
 		return shader;
 	}
+
+	static collisionWithSphere(radiusOne, radiusTwo, posX, posY, posZ, posX2, posY2, posZ2) {
+		var distance = Math.sqrt( ((posX-posX2)*(posX-posX2)) + ((posY-posY2)*(posY-posY2)) + ((posZ-posZ2)*(posZ-posZ2)) );
+		return (distance<radiusOne+radiusTwo);
+	}
+
+	static collisionWithPlane(posX, posY, posZ) {
+		return ((posX >=1.0 || posX <= -1.0) || (posY >=1.0 || posY <= -1.0) || (posZ >=1.0 || posZ <= -10.0));
+	}
 }

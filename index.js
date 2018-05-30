@@ -28,9 +28,10 @@ var deltaZ2 = 0.0;
 
 
 //
-var numberOfObjects = 1;
+var numberOfObjects = 2;
 var objects = [];
 var spheresPositions = [];
+var matrices = [];
 
 
 main();
@@ -209,7 +210,7 @@ function main() {
   
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
-  sphereO = new Sphere(1, 'Sphere', 30.85, 0.1);
+  /*sphereO = new Sphere(1, 'Sphere', 30.85, 0.1);
   sphereV = new Sphere(4, 'Sphere', 30.85, 0.1);
   cylinderO = new Cylinder(2, 'Cylinder', 2);
   cubeO = new Cube(3, 'Cube');
@@ -221,9 +222,12 @@ function main() {
   buffers.cy = cyBuffers;
   buffers.spo = soBuffers;
   buffers.spv = svBuffers;
-  buffers.cu = cuBuffers;
+  buffers.cu = cuBuffers;*/
+  var buffers = [];
+  for (var i = 0; i < numberOfObjects; i++) {
+    buffers.push(objects[i].initialize(gl));
+  }
   var then = 0;
-  //var objects = [];
 
   // Draw the scene repeatedly
   function render(now) {
@@ -269,17 +273,47 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
   
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
+  matrices = [];
   const modelViewMatrix = mat4.create();
+  matrices.push(modelViewMatrix);
+
+  if (numberOfObjects>1) {
+    for (var j = 1; j < numberOfObjects; j++) {
+      var matrix = mat4.create();
+      mat4.copy(matrix, modelViewMatrix);
+      matrices.push(matrix);
+    }  
+  }
+
 
   for (var i = 0; i < numberOfObjects; i++) {
-    var matrix = mat4.create();
-    mat4.copy(matrix, modelViewMatrix);
     var sphereObj = objects[i];
+    //console.log(sphereObj);
     var positionObj = spheresPositions[i];
-    mat4.translate(matrix, matrix, [positionObj.randomX, positionObj.randomY, positionObj.randomZ]);
-    sphereObj.draw(gl, programInfo, matrix, projectionMatrix, sphereObj.initialize(gl), deltaTime, [0.0,0.0,-16.0], textures);
+    //console.log(positionObj);
+    mat4.translate(matrices[i], matrices[i], [positionObj.randomX, positionObj.randomY, positionObj.randomZ]);
+    sphereObj.draw(gl, programInfo, matrices[i], projectionMatrix, buffers[i], deltaTime, [0.0,0.0,-16.0], textures);
+
+    var collision = false;
+    collision = ((positionObj.randomX >=1.0 || positionObj.randomX <= -1.0) || (positionObj.randomY >=1.0 || positionObj.randomY <= -1.0) || (positionObj.randomZ >=1.0 || positionObj.randomZ <= -10.0));
     
-    /*if(positionObj.randomX != positionObj.initX){
+    if (collision) {
+
+      positionObj.randomX = (Math.random() * -1.5) + 1.5;
+      positionObj.randomY = (Math.random() * -1.5) + 1.5;
+      positionObj.randomZ = (Math.random() * -10) + 1;
+
+      var catetoX = Math.abs(positionObj.randomX-positionObj.initX);
+      var catetoY = Math.abs(positionObj.randomY-positionObj.initY);
+      var catetoZ = Math.abs(positionObj.randomZ-positionObj.initZ);
+      var hipote = Math.sqrt((catetoX*catetoX)+(catetoY*catetoY)+(catetoZ*catetoZ))
+      positionObj.deltaX = catetoX/hipote;
+      positionObj.deltaY = catetoY/hipote;
+      positionObj.deltaZ = catetoZ/hipote;
+
+    }
+
+    if(positionObj.randomX != positionObj.initX){
       if(positionObj.randomX<positionObj.initX){
         positionObj.randomX+=positionObj.deltaX*deltaTime;
       }
@@ -304,7 +338,7 @@ function drawScene(gl, programInfo, buffers, deltaTime, textures) {
       if(positionObj.randomZ>positionObj.initZ){
         positionObj.randomZ-=positionObj.deltaZ*deltaTime;
       }   
-    }*/
+    }
 
   }
 
